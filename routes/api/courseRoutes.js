@@ -20,9 +20,8 @@ router.get(
 );
 
 router.get(
-    "/getByDomain",
-    validator.getCoursesByDomainValidationSchema,
-    courseController.getCoursesByDomain,
+    "/getCourses",
+    courseController.getCourses,
 );
 
 router.get(

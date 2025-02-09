@@ -11,7 +11,6 @@ router.get(
 
 router.get(
     "/getByDomain",
-    validator.getTeacherByDomainValidationSchema,
     teacherController.getTeachersByDomain,
 );
 

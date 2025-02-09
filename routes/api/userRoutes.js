@@ -9,7 +9,7 @@ router.post(
     userController.createUser
 );
 
-router.get(
+router.post(
     "/login",
     validator.loginValidationSchema,
     userController.login

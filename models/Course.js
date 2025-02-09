@@ -107,12 +107,13 @@ class Course {
       LIMIT 8`;
       db.query(query, (err, result) => {
         if (err) return reject(err);
+        result.forEach(row => helper.appendMainUrlToKey(row, "cover_url"));
         resolve(result);
       });
     });
   }
 
-  static getByDomain(domain_id) {
+  static getCourses() {
     return new Promise((resolve, reject) => {
       const query = `
       SELECT 
@@ -127,13 +128,15 @@ class Course {
       LEFT JOIN users u ON c.teacher_id = u.user_id
       LEFT JOIN teacher t ON c.teacher_id = t.teacher_id
       LEFT JOIN domain d ON t.domain_id = d.domain_id
-      WHERE t.domain_id = ?`;
-      db.query(query, [domain_id], (err, result) => {
+      `;
+      db.query(query, (err, result) => {
         if (err) return reject(err);
+        result.forEach(row => helper.appendMainUrlToKey(row, "cover_url"));
         resolve(result);
       });
     });
   }
+
 
   static addContent(newContent) {
     const query =
@@ -161,6 +164,7 @@ class Course {
       const query = "SELECT * FROM content WHERE course_id = ?";
       db.query(query, [course_id], (err, result) => {
         if (err) return reject(err);
+        result.forEach(row => helper.appendMainUrlToKey(row, "url"));
         resolve(result);
       });
     });

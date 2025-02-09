@@ -95,7 +95,7 @@ exports.getRandomCourses = async (req, res) => {
     }
 };
 
-exports.getCoursesByDomain = async (req, res) => {
+exports.getCourses = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -104,9 +104,7 @@ exports.getCoursesByDomain = async (req, res) => {
         });
     }
     try {
-        const { domain_id } = req.body;
-
-        const courses = await Course.getByDomain(domain_id);
+        const courses = await Course.getCourses();
 
         res.status(200).json(courses);
     } catch (error) {

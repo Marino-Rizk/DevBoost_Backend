@@ -43,9 +43,8 @@ exports.getTeachersByDomain = async (req, res) => {
         });
     }
     try {
-        const { domain_id } = req.body;
 
-        const teachers = await Teacher.getByDomain(domain_id);
+        const teachers = await Teacher.getTeachers();
 
         res.status(200).json(teachers);
     } catch (error) {

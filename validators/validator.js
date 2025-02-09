@@ -137,19 +137,6 @@ const addContentValidationSchema = checkSchema({
   },
 });
 
-const getCoursesByDomainValidationSchema = checkSchema({
-  domain_id: {
-    in: ["body"],
-    notEmpty: {
-      errorMessage: "domain is required",
-    },
-    isIn: {
-      options: [[1, 2, 3, 4]],
-      errorMessage: "role must be either 1, 2, 3, or 4",
-    },
-  },
-});
-
 const enrollmentValidationSchema = checkSchema({
   user_id: {
     in: ["body"],
@@ -184,18 +171,6 @@ const searchTeacherValidationSchema = checkSchema({
   },
 });
 
-const getTeacherByDomainValidationSchema = checkSchema({
-  domain_id: {
-    in: ["body"],
-    notEmpty: {
-      errorMessage: "domain is required",
-    },
-    isIn: {
-      options: [[1, 2, 3, 4]],
-      errorMessage: "role must be either 1, 2, 3, or 4",
-    },
-  },
-});
 
 //////////////////////////////////////////////
 
@@ -271,8 +246,6 @@ module.exports = {
   updatePasswordValidationSchema,
   createCourseValidationSchema,
   addContentValidationSchema,
-  getCoursesByDomainValidationSchema,
-  getTeacherByDomainValidationSchema,
   enrollmentValidationSchema,
   createNotificationValidationSchema,
   readNotificationValidationSchema,
