@@ -159,6 +159,33 @@ class Course {
     });
   }
 
+  static getCoursesByTeacherId(teacher_id) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT 
+                c.course_id, 
+                c.title, 
+                d.domain_description, 
+                c.cover_url, 
+                c.description,
+                u.user_id, 
+                u.full_name 
+            FROM courses c
+            LEFT JOIN users u ON c.teacher_id = u.user_id
+            LEFT JOIN teacher t ON c.teacher_id = t.teacher_id
+            LEFT JOIN domain d ON t.domain_id = d.domain_id
+            WHERE c.teacher_id = ?
+        `;
+
+        db.query(query, [teacher_id], (err, result) => {
+            if (err) return reject(err);
+            result.forEach(row => helper.appendMainUrlToKey(row, "cover_url"));
+            resolve(result);
+        });
+    });
+}
+
+
   static getContent(course_id) {
     return new Promise((resolve, reject) => {
       const query = "SELECT * FROM content WHERE course_id = ?";

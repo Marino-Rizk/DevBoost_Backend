@@ -10,7 +10,7 @@ router.post(
 );
 
 router.post(
-    "/delete/:courseId",
+    "/delete",
     courseController.deleteCourse
 );
 
@@ -27,6 +27,11 @@ router.get(
 router.get(
     "/searchCourse/:q",
     courseController.searchCourse,
+);
+
+router.get(
+    "/getByTeacherId/:teacher_id",
+    courseController.getCoursesByTeacherId,
 );
 
 router.post(

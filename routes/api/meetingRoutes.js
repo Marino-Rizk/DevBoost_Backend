@@ -14,5 +14,8 @@ router.get(
     meetingController.getMeetingsByUser
 );
 
-
+router.post(
+    "/deleteMeeting",
+    meetingController.deleteMeeting
+)
 module.exports = router;

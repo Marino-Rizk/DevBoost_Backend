@@ -38,17 +38,27 @@ class Meeting {
     static getMeetingsByUser(userId) {
         return new Promise((resolve, reject) => {
             const query = `
-                SELECT meeting_id, title, 
-                JSON_UNQUOTE(JSON_EXTRACT(meeting_date_time, '$.start')) AS meeting_start, 
-                JSON_UNQUOTE(JSON_EXTRACT(meeting_date_time, '$.end')) AS meeting_end, 
-                user_id, teacher_id 
-                FROM meetings 
-                WHERE user_id = ? OR teacher_id = ?
+                SELECT m.meeting_id, m.title, 
+                JSON_UNQUOTE(JSON_EXTRACT(m.meeting_date_time, '$.start')) AS meeting_start, 
+                JSON_UNQUOTE(JSON_EXTRACT(m.meeting_date_time, '$.end')) AS meeting_end, 
+                m.user_id, m.teacher_id, t.meeting_link
+                FROM meetings m 
+                LEFT JOIN teacher t on m.teacher_id = t.teacher_id 
+                WHERE m.user_id = ? OR m.teacher_id = ?
             `;
 
             db.query(query, [userId, userId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
+            });
+        });
+    }
+    static delete(meetingId) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM meetings WHERE meeting_id = ?`;
+            db.query(query, [meetingId], (err, result) => {
+                if (err) return reject(err);
+                resolve(result.affectedRows > 0);
             });
         });
     }

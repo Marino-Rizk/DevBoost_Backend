@@ -43,3 +43,26 @@ exports.getMeetingsByUser = async (req, res) => {
         });
     }
 };
+
+exports.deleteMeeting = async (req, res) => {
+    const { meeting_id } = req.body;
+
+    if (!meeting_id) {
+        return res.status(400).json({ error: "Meeting ID is required" });
+    }
+
+    try {
+        const deleted = await Meeting.delete(meeting_id);
+        if (deleted) {
+            res.status(200).json({ message: "Meeting deleted successfully" });
+        } else {
+            res.status(404).json({ error: "Meeting not found" });
+        }
+    } catch (error) {
+        console.error("Error deleting meeting:", error.message);
+        res.status(500).json({
+            message: "An error occurred while deleting the meeting",
+            error: error.message
+        });
+    }
+};

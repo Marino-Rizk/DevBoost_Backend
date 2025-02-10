@@ -198,15 +198,7 @@ const readNotificationValidationSchema = checkSchema({
       errorMessage: "user_id must be a number",
     },
   },
-  notification_id: {
-    in: ["body"],
-    notEmpty: {
-      errorMessage: "notification_id is required",
-    },
-    isInt: {
-      errorMessage: "notification_id must be a number",
-    },
-  },
+  
 });
 
 ///////////////////////////////////////////////

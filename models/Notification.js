@@ -44,7 +44,7 @@ class Notification {
     static getUnreadNotifications(userId) {
         return new Promise((resolve, reject) => {
             const query = `
-        SELECT n.title, n.description, n.sent_date FROM notifications n
+        SELECT un.user_notification_id, n.title, n.description, n.sent_date  FROM notifications n
         LEFT JOIN user_notifications un ON n.notification_id = un.notification_id
         WHERE un.user_id = ? AND un.status = 0
       `;
