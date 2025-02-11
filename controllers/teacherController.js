@@ -76,27 +76,6 @@ exports.updateProfile = async (req, res) => {
     let imageUrl = null;
     const image = req.files?.cover_url;
 
-    if (image) {
-        try {
-            const uploadedFilePath = await helper.uploadAndRenameFile(image);
-            if (!uploadedFilePath.filePath || !uploadedFilePath.fileUrl) {
-                return res.status(500).json({
-                    errorCode: "upload_failed",
-                    errorMessage: "Failed to upload image",
-                });
-            }
-
-            imageUrl = uploadedFilePath.fileUrl;
-
-            
-        } catch (err) {
-            return res.status(500).json({
-                errorCode: "upload_failed",
-                errorMessage: "Error processing uploaded file",
-            });
-        }
-    }
-
     try {
         // Fetch existing user
         const oldProfile = await User.findById(user_id);
@@ -111,18 +90,45 @@ exports.updateProfile = async (req, res) => {
             });
         }
 
-        // Update profile
-        await User.updateTeacherProfile(user_id, {
+        // Upload new image if provided
+        if (image) {
+            try {
+                const uploadedFilePath = await helper.uploadAndRenameFile(image);
+                console.log("Uploaded File Path:", uploadedFilePath); // Debugging log
+
+                if (!uploadedFilePath || !uploadedFilePath.fileUrl) {
+                    return res.status(500).json({
+                        errorCode: "upload_failed",
+                        errorMessage: "Failed to upload image",
+                    });
+                }
+                imageUrl = uploadedFilePath.fileUrl;
+            } catch (err) {
+                console.error("Upload error:", err);
+                return res.status(500).json({
+                    errorCode: "upload_failed",
+                    errorMessage: "Error processing uploaded file",
+                });
+            }
+        }
+
+        // Use either the new image or the existing one
+        const finalImageUrl = imageUrl || oldProfile.image_url;
+        console.log("Final Image URL:", finalImageUrl); // Debugging log
+
+        // Update profile with new or existing data
+        const updatedProfile = await User.updateTeacherProfile(user_id, {
             full_name: full_name || oldProfile.full_name,
-            image_url: imageUrl || oldProfile.image_url, // Use uploaded image if provided
+            image_url: finalImageUrl, // Ensure this is set correctly
             description: description || oldProfile.description,
             meeting_link: meeting_link || oldProfile.meeting_link,
         });
 
-        // Fetch updated profile
-        const updatedProfile = await User.findById(user_id);
+        // Fetch and return updated profile
+        const newProfile = await User.findById(user_id);
+        console.log("Updated Profile:", newProfile); // Debugging log
 
-        return res.status(200).json(updatedProfile);
+        return res.status(200).json(newProfile);
     } catch (err) {
         console.error("Error updating teacher profile:", err);
         return res.status(500).json({
@@ -131,3 +137,5 @@ exports.updateProfile = async (req, res) => {
         });
     }
 };
+
+
