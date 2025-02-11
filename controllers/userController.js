@@ -158,3 +158,23 @@ exports.updateAdminPassword = async (req, res) => {
       });
     }
   };
+
+  exports.getAllStudents = async (req, res) => {
+    try {
+      const students = await User.findByRoleId(1); // Assuming findByRoleId is a method in User model
+      
+      if (!students || students.length === 0) {
+        return res.status(404).json({ message: "No students found" });
+      }
+      
+      return res.status(200).json(
+        students,
+      );
+    } catch (error) {
+      console.error("Error fetching students:", error);
+      return res.status(500).json({
+        errorCode: "internal_server_error",
+        errorMessage: error.message || "An unexpected error occurred",
+      });
+    }
+  };

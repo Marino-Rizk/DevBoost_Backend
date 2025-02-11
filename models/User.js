@@ -114,7 +114,14 @@ class User {
     });
   }
 
-
+  static findByRoleId(roleId) {
+    return new Promise((resolve, reject) => {
+      db.query("SELECT * FROM users WHERE role_id = ?", [roleId], (err, results) => {
+        if (err) return reject(err);
+        resolve(results);
+      });
+    });
+  }
 
 }
 

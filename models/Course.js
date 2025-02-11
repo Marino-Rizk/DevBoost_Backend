@@ -184,7 +184,7 @@ class Course {
         });
     });
 }
-
+ 
 
   static getContent(course_id) {
     return new Promise((resolve, reject) => {

@@ -30,4 +30,10 @@ router.put(
     validator.updatePasswordValidationSchema,
     userController.updateAdminPassword
 );
+
+router.get(
+    "/students",
+    userController.getAllStudents
+);
+
 module.exports = router;
