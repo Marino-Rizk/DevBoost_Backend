@@ -35,8 +35,6 @@ exports.createUser = async (req, res) => {
       const { image_url: createdImage_url, description: createdDescription, domain_id: createdDomain_id,meeting_link:createdMeetingLink } = teacher;
 
       return res.status(201).json({
-        message: 'User created successfully',
-        data: {
           user_id,
           full_name: createdFullName,
           email: createdEmail,
@@ -45,7 +43,7 @@ exports.createUser = async (req, res) => {
           description: createdDescription,
           domain_id: createdDomain_id,
           meeting_link:createdMeetingLink
-        },
+        ,
       });
     }
 
