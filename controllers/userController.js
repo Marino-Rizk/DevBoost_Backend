@@ -95,6 +95,54 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.loginAdmin = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errorCode: "missing_fields",
+      errorMessage: errors.array(),
+    });
+  }
+
+  try {
+    const { email, password } = req.body;
+
+    const results = await User.findByEmail(email);
+    if (results.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password"
+      });
+    }
+
+    const user = results[0];
+
+    // Check if password is correct
+    if (user.password !== password) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid password"
+      });
+    }
+
+    // Successful login
+    res.status(200).json({
+      success: true,
+      message: "Login Successful",
+      user: user // You can still send the user object if needed
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred during the login process',
+      error: error.message
+    });
+  }
+};
+
+
 exports.getUserData = async (req, res) => {
   const { userId } = req.params;
 

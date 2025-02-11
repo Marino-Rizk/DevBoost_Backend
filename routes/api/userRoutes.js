@@ -15,12 +15,18 @@ router.post(
     userController.login
 );
 
+router.post(
+    "/loginAdmin",
+    validator.loginValidationSchema,
+    userController.loginAdmin
+);
+
 router.get(
     "/getUser/:userId",
     userController.getUserData
 );
 
-router.post(
+router.delete(
     "/delete/:userId",
     userController.deleteUser
 );
