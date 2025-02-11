@@ -25,7 +25,7 @@ router.get(
 );
 
 router.get(
-    "/searchCourse/:q",
+    "/searchCourse",
     courseController.searchCourse,
 );
 

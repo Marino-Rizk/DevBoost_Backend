@@ -2,24 +2,21 @@ const db = require("../config/db");
 const helper = require("../utils/helper");
 
 class Meeting {
-    constructor(title, meeting_date_time, user_id, teacher_id) {
+    constructor(title, meeting_start, user_id, teacher_id) {
         this.title = title;
-        this.meeting_date_time = meeting_date_time;
+        this.meeting_start = meeting_start;
         this.user_id = user_id;
         this.teacher_id = teacher_id;
-
     }
 
-    static create(title, meetingStart, meetingEnd, user_id, teacher_id) {
+    static create(title, meeting_start, user_id, teacher_id) {
         return new Promise((resolve, reject) => {
-            const meeting_date_time = JSON.stringify({ start: meetingStart, end: meetingEnd });
-
             const query = `
-                INSERT INTO meetings (title, meeting_date_time, user_id, teacher_id) 
+                INSERT INTO meetings (title, meeting_start, user_id, teacher_id) 
                 VALUES (?, ?, ?, ?)
             `;
 
-            db.query(query, [title, meeting_date_time, user_id, teacher_id], (err, result) => {
+            db.query(query, [title, meeting_start, user_id, teacher_id], (err, result) => {
                 if (err) return reject(err);
 
                 const meetingId = result.insertId;
@@ -39,8 +36,7 @@ class Meeting {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT m.meeting_id, m.title, 
-                JSON_UNQUOTE(JSON_EXTRACT(m.meeting_date_time, '$.start')) AS meeting_start, 
-                JSON_UNQUOTE(JSON_EXTRACT(m.meeting_date_time, '$.end')) AS meeting_end, 
+                m.meeting_start, 
                 m.user_id, m.teacher_id, t.meeting_link
                 FROM meetings m 
                 LEFT JOIN teacher t on m.teacher_id = t.teacher_id 
@@ -53,6 +49,7 @@ class Meeting {
             });
         });
     }
+
     static delete(meetingId) {
         return new Promise((resolve, reject) => {
             const query = `DELETE FROM meetings WHERE meeting_id = ?`;

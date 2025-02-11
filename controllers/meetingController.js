@@ -11,13 +11,13 @@ exports.createMeeting = async (req, res) => {
     }
 
     try {
-        const { title, meeting_start, meeting_end, user_id, teacher_id } = req.body;
+        const { title, meeting_start, user_id, teacher_id } = req.body;
 
-        if (!meeting_start || !meeting_end) {
-            return res.status(400).json({ error: "Meeting start and end times are required" });
+        if (!meeting_start) {
+            return res.status(400).json({ error: "Meeting start time is required" });
         }
 
-        const meeting = await Meeting.create(title, meeting_start, meeting_end, user_id, teacher_id);
+        const meeting = await Meeting.create(title, meeting_start, user_id, teacher_id);
         res.status(201).json(meeting);
 
     } catch (error) {

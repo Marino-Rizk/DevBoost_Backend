@@ -15,7 +15,7 @@ router.get(
 );
 
 router.get(
-    "/searchTeacher/:q",
+    "/searchTeacher",
     teacherController.searchTeacher,
 );
 

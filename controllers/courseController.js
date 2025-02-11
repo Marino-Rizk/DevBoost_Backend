@@ -68,12 +68,18 @@ exports.deleteCourse = async (req, res) => {
 };
 
 exports.searchCourse = async (req, res) => {
+    const { title } = req.query; // Use query params
 
-    const { q } = req.params;
+    if (!title) {
+        return res.status(400).json({
+            errorCode: "missing_parameter",
+            errorMessage: "Title query parameter is required",
+        });
+    }
 
     try {
-        const course = await Course.searchCourse(q);
-        return res.status(200).json(course);
+        const courses = await Course.searchCourse(title);
+        return res.status(200).json(courses);
     } catch (err) {
         console.error("Error searching course:", err);
         return res.status(500).json({
@@ -82,6 +88,7 @@ exports.searchCourse = async (req, res) => {
         });
     }
 };
+
 
 exports.getRandomCourses = async (req, res) => {
     

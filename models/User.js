@@ -40,8 +40,7 @@ class User {
         if (err) return reject(err);
         if (!results.length) return resolve(null);
 
-        let user = helper.appendMainUrlToKey(results[0], "image_url");
-        resolve(user);
+        resolve(results[0]);
       });
     });
   }
@@ -89,7 +88,7 @@ class User {
       db.query(
         `UPDATE users u 
             LEFT JOIN teacher t ON u.user_id = t.teacher_id
-            SET u.full_name = ?, u.image_url = ?, 
+            SET u.full_name = ?, t.image_url = ?, 
                 t.description = ?, t.meeting_link = ?
             WHERE u.user_id = ? AND u.role_id = 2`,
         [full_name, image_url, description, meeting_link, user_id],
@@ -106,7 +105,7 @@ class User {
             (err, rows) => {
               if (err) return reject(err);
               if (!rows.length) return reject(new Error("User not found after update"));
-              resolve(helper.appendMainUrlToKey(rows[0], "image_url"));
+              resolve(rows[0]);
             }
           );
         }
