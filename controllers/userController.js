@@ -189,10 +189,10 @@ exports.updateAdminPassword = async (req, res) => {
       });
     }
   
-    const { password } = req.body;
+    const { newPassword } = req.body;
   
     try {
-      await User.updatePassword(password);
+      await User.updatePassword(newPassword);
       return res.status(200).json({
         message: "Password updated successfully",
       });

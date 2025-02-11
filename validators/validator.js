@@ -71,7 +71,7 @@ const loginValidationSchema = checkSchema({
 // });
 
 const updatePasswordValidationSchema = checkSchema({
-  password: {
+  newPassword: {
     in: ["body"],
     notEmpty: {
       errorMessage: "password is required",
