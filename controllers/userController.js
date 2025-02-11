@@ -26,7 +26,7 @@ exports.createUser = async (req, res) => {
     const newUser = { full_name, email, password, role_id };
     const user = await User.create(newUser);
 
-    const { id, full_name: createdFullName, email: createdEmail, role_id: createdRoleId } = user;
+    const { user_id, full_name: createdFullName, email: createdEmail, role_id: createdRoleId } = user;
 
     if (createdRoleId === 2) {
       const teacher_id = user.user_id;
@@ -37,7 +37,7 @@ exports.createUser = async (req, res) => {
       return res.status(201).json({
         message: 'User created successfully',
         data: {
-          id,
+          user_id,
           full_name: createdFullName,
           email: createdEmail,
           role_id: createdRoleId,
@@ -52,7 +52,7 @@ exports.createUser = async (req, res) => {
     return res.status(201).json({
       message: 'User created successfully',
       data: {
-        id,
+        user_id,
         full_name: createdFullName,
         email: createdEmail,
         role_id: createdRoleId,
